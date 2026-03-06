@@ -1,6 +1,7 @@
 name: "Build timing"
 
 on:
+  push:
   workflow_dispatch:
 
 jobs:
