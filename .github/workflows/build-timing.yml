@@ -1,0 +1,40 @@
+name: "Build timing"
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build_timing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Install dependencies (timed)
+        shell: bash
+        run: |
+          set -euo pipefail
+          start=$(date +%s)
+          echo "START install: $(date -Is)"
+
+          git submodule update --init
+          sudo apt update
+          sudo apt install -y gcc g++ gfortran libopenblas-dev liblapack-dev pkg-config python3-pip python3-dev
+          python -m pip install -r requirements/build.txt -r requirements/dev.txt
+
+          end=$(date +%s)
+          echo "END install: $(date -Is)"
+          echo "Install took $((end-start)) seconds" | tee -a "$GITHUB_STEP_SUMMARY"
+
+      - name: Build SciPy (timed)
+        shell: bash
+        run: |
+          set -euo pipefail
+          start=$(date +%s)
+          echo "START build: $(date -Is)"
+
+          spin build
+
+          end=$(date +%s)
+          echo "END build: $(date -Is)"
+          echo "Build took $((end-start)) seconds" | tee -a "$GITHUB_STEP_SUMMARY"
