@@ -9,4 +9,4 @@ query-filters:
         - cpp/sql-injection
         - cpp/cgi-xss
         - cpp/external-entity-expansion
-        - py/overly-large-range
+        - cpp/signed-shift
