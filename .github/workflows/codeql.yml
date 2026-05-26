@@ -92,6 +92,7 @@ jobs:
         output: sarif-results
         upload: failure-only
 
+    # Remove alerts that are on file paths below from the sarif file
     - name: filter-sarif
       if: matrix.language == 'c-cpp'
       uses: advanced-security/filter-sarif@2da736ff05ef065cb2894ac6892e47b5eac2c3c0 # v1.1
@@ -101,8 +102,8 @@ jobs:
           -build/**
           -tools/**
           -benchmarks/**
-        input: sarif-results/cpp.sarif
-        output: sarif-results/cpp.sarif
+        input: sarif-results/${{ matrix.language }}.sarif
+        output: sarif-results/${{ matrix.language }}.sarif
 
     - name: Upload SARIF
       uses: github/codeql-action/upload-sarif@0d579ffd059c29b07949a3cce3983f0780820c98 # v4
