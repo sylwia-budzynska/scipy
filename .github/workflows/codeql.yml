@@ -1,19 +1,8 @@
-# For most projects, this workflow file will not need changing; you simply need
-# to commit it to your repository.
-#
-# You may wish to alter this file to override the set of languages analyzed,
-# or to provide custom queries or build logic.
-#
-# ******** NOTE ********
-# We have attempted to detect the languages in your repository. Please check
-# the `language` matrix defined below to confirm you have the correct set of
-# supported CodeQL languages.
-#
 name: "CodeQL Advanced"
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "pr-24991"]
 
 permissions: {}
 
@@ -67,17 +56,13 @@ jobs:
         debug: true
         trap-caching: false
         languages: ${{ matrix.language }}
+        build-mode: ${{ matrix.build-mode }}
         config-file: .github/codeql/codeql-config.yml
 
         # If you wish to specify custom queries, you can do so here or in a config file.
         # By default, queries listed here will override any specified in a config file.
         # Prefix the list here with "+" to use these queries and those in the config file.
         # queries: ./path/to/local/query, your-org/your-repo/queries@main
-
-
-        # If you wish to specify custom queries, you can do so here or in a config file.
-        # By default, queries listed here will override any specified in a config file.
-        # Prefix the list here with "+" to use these queries and those in the config file.
 
         # queries: security-extended,security-and-quality
 
@@ -120,7 +105,6 @@ jobs:
         output: sarif-results/cpp.sarif
 
     - name: Upload SARIF
-      if: matrix.language == 'c-cpp'
       uses: github/codeql-action/upload-sarif@0d579ffd059c29b07949a3cce3983f0780820c98 # v4
       with:
-        sarif_file: sarif-results/cpp.sarif
+        sarif_file: sarif-results/${{ matrix.language }}.sarif
